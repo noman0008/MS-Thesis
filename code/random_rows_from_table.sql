@@ -1,0 +1,1 @@
+select * from comments where lower(comment) like '%facebook%' AND score>1 order by random() limit 2000;

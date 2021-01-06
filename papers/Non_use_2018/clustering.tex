@@ -1,0 +1,40 @@
+
+\documentclass[]{article}
+\begin{document}
+\section{Unsupervised Clustering}
+
+We have divided the whole clustering process into following subcategories:
+
+\begin{itemize}
+    \item tokenizing and stemming each synopsis
+\item transforming the corpus into vector space using tf-idf
+\item calculating cosine distance between each document as a measure of similarity
+\item clustering the documents using the k-means algorithm
+
+\item using multidimensional scaling to reduce dimensionality within the corpus
+\item plotting the clustering output using matplotlib and mpld3
+\item conducting a hierarchical clustering on the corpus using Ward clustering
+\item plotting a Ward dendrogram
+\end{itemize}
+
+
+
+The stopwords removal and stemming was done using regular Python package. Below we define two functionsfor tokenization:
+
+tokenize and stem: tokenizes (splits the synopsis into a list of its respective words (or tokens) and also stems each token
+tokenize only: tokenizes the synopsis only
+
+
+I use both these functions to create a dictionary which becomes important in case I want to use stems for an algorithm, but later convert stems back to their full words for presentation purposes.
+
+Here, I define term frequency-inverse document frequency (tf-idf) vectorizer parameters and then convert the synopses list into a tf-idf matrix. To get a Tf-idf matrix, first count word occurrences by document. This is transformed into a document-term matrix (dtm). This is also just called a term frequency matrix. An example of a dtm is here at right. Then apply the term frequency-inverse document frequency weighting: words that occur frequently within a document but not frequently within the corpus receive a higher weighting as these words are assumed to contain more meaning in relation to the document.
+
+A couple things to note about the parameters I define below:
+\begin{itemize}
+\item max\_df: this is the maximum frequency within the documents a given feature can have to be used in the tfi-idf matrix. If the term is in greater than 80\% of the documents it probably cares little meanining (in the context of comments)
+\item min\_idf: this could be an integer (e.g. 5) and the term would have to be in at least 5 of the documents to be considered. Here I pass 0.2; the term must be in at least 20\% of the document. I found that if I allowed a lower min\_df I ended up basing clustering on comments the comments carry no real meaning.
+
+dist is defined as 1 - the cosine similarity of each document. Cosine similarity is measured against the tf-idf matrix and can be used to generate a measure of similarity between each document and the other documents in the corpus (each synopsis among the synopses). Subtracting it from 1 provides cosine distance which I will use for plotting on a euclidean (2-dimensional) plane. Using the tf-idf matrix, you can run a slew of clustering algorithms to better understand the hidden structure within the synopses. I first chose k-means. K-means initializes with a pre-determined number of clusters (I chose 5). Each observation is assigned to a cluster (cluster assignment) so as to minimize the within cluster sum of squares. Next, the mean of the clustered observations is calculated and used as the new cluster centroid. Then, observations are reassigned to clusters and centroids recalculated in an iterative process until the algorithm reaches convergence.
+
+\end{itemize}
+\end{document}
